@@ -1,13 +1,9 @@
 package com.devm7mdibrahim.movies.di
 
 import android.content.Context
-import com.devm7mdibrahim.movies.data.remote.RemoteDataSourceImpl
 import com.devm7mdibrahim.movies.BuildConfig
 import com.devm7mdibrahim.movies.data.remote.ApiService
-import com.devm7mdibrahim.movies.data.remote.RemoteDataSource
-import com.devm7mdibrahim.movies.utils.BASE_URL
 import com.devm7mdibrahim.movies.utils.NetworkHelper
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,6 +14,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Qualifier
 import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 
@@ -27,9 +24,9 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(client: OkHttpClient): Retrofit {
+    fun provideRetrofit(client: OkHttpClient, @BaseUrl baseUrl: String): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
@@ -62,6 +59,14 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideNetworkHelper(@ApplicationContext context: Context) = NetworkHelper(context)
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class BaseUrl
+
+    @Provides
+    @BaseUrl
+    fun provideBaseUrl(): String = "https://api.themoviedb.org/"
 
     @Provides
     @Singleton

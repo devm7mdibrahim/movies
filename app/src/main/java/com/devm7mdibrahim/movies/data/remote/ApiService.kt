@@ -7,9 +7,9 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface ApiService {
-    @GET("/3/movie/popular")
+    @GET("3/movie/popular")
     suspend fun getMovies(): Response<MoviesResponse>
 
-    @GET("/3/movie/{movie_id}")
+    @GET("3/movie/{movie_id}")
     suspend fun getMovieDetails(@Path("movie_id") movieId: Int): Response<MovieDetailsResponse>
 }
