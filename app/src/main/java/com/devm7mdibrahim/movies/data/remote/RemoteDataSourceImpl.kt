@@ -4,9 +4,7 @@ import com.devm7mdibrahim.movies.data.model.details.MovieDetailsResponse
 import com.devm7mdibrahim.movies.data.model.movies.MoviesResponse
 import retrofit2.Response
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class RemoteDataSourceImpl @Inject constructor(private val apiService: ApiService) :
     RemoteDataSource {
     override suspend fun getMovies(): Response<MoviesResponse> = apiService.getMovies()

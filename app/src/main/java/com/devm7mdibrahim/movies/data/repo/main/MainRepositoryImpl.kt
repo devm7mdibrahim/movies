@@ -6,10 +6,8 @@ import com.devm7mdibrahim.movies.utils.DataState
 import com.devm7mdibrahim.movies.utils.NetworkHelper
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 
-@Singleton
 class MainRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val networkHelper: NetworkHelper,
