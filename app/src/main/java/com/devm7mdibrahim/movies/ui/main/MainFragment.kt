@@ -28,8 +28,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     private val movieAdapter by lazy {
         MovieAdapter {
-            displayLog(it.toString())
-
             navController?.navigate(
                 MainFragmentDirections.actionMainFragmentToDetailsFragment(
                     movieId = it.id

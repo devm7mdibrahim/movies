@@ -8,7 +8,7 @@ import com.devm7mdibrahim.movies.databinding.ItemMovieBinding
 
 class MovieAdapter (private val listener: (Movie) -> Unit) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
-    private var list = mutableListOf<Movie>()
+    private var list = emptyList<Movie>()
 
     inner class MovieViewHolder(private val binding: ItemMovieBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -23,9 +23,8 @@ class MovieAdapter (private val listener: (Movie) -> Unit) : RecyclerView.Adapte
     }
 
     fun submitList(list: List<Movie>) {
-        this.list.clear()
-        this.list.addAll(list)
-        notifyItemRangeInserted(0, list.size - 1)
+        this.list = list
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
