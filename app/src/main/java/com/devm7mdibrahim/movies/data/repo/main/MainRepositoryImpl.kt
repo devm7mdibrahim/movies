@@ -4,20 +4,22 @@ import com.devm7mdibrahim.movies.data.model.movies.Movie
 import com.devm7mdibrahim.movies.data.remote.RemoteDataSource
 import com.devm7mdibrahim.movies.utils.DataState
 import com.devm7mdibrahim.movies.utils.NetworkHelper
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
+import javax.inject.Singleton
+import kotlin.coroutines.CoroutineContext
 
+@Singleton
 class MainRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
-    private val networkHelper: NetworkHelper
+    private val networkHelper: NetworkHelper,
+    private val IOContext: CoroutineContext
 ) : MainRepository {
 
     private val _movies = MutableStateFlow<DataState<List<Movie>>>(DataState.Idle)
 
-    override suspend fun getMovies(): Flow<DataState<List<Movie>>> {
-        return flow {
+    override suspend fun getMovies(): Flow<DataState<List<Movie>>> =
+        flow<DataState<List<Movie>>> {
             _movies.emit(DataState.Loading)
 
             if (networkHelper.isNetworkConnected()) {
@@ -42,6 +44,5 @@ class MainRepositoryImpl @Inject constructor(
             } else {
                 _movies.emit(DataState.Error("no internet connection!"))
             }
-        }
-    }
+        }.flowOn(IOContext)
 }

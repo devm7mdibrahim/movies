@@ -1,5 +1,6 @@
 package com.devm7mdibrahim.movies.ui.main
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devm7mdibrahim.movies.data.model.movies.Movie
@@ -13,7 +14,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val mainRepository: MainRepository): ViewModel() {
+class MainViewModel @Inject constructor(
+    private val mainRepository: MainRepository,
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
     private val _movies = MutableStateFlow<DataState<List<Movie>>>(DataState.Idle)
 

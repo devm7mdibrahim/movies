@@ -13,7 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
-    private val detailsRepository: DetailsRepository
+    private val detailsRepository: DetailsRepository,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _movie = MutableStateFlow<DataState<MovieDetailsResponse>>(DataState.Idle)

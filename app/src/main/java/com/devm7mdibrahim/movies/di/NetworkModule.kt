@@ -3,7 +3,10 @@ package com.devm7mdibrahim.movies.di
 import android.content.Context
 import com.devm7mdibrahim.movies.BuildConfig
 import com.devm7mdibrahim.movies.data.remote.ApiService
+import com.devm7mdibrahim.movies.data.remote.RemoteDataSource
+import com.devm7mdibrahim.movies.data.remote.RemoteDataSourceImpl
 import com.devm7mdibrahim.movies.utils.NetworkHelper
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -55,6 +58,10 @@ object NetworkModule {
     fun provideApiService(retrofit: Retrofit): ApiService = retrofit.create(
         ApiService::class.java
     )
+
+    @Provides
+    @Singleton
+    fun provideRemoteDataSource(apiService: ApiService): RemoteDataSource = RemoteDataSourceImpl(apiService)
 
     @Singleton
     @Provides

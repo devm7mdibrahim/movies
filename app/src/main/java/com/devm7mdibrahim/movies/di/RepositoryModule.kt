@@ -1,30 +1,35 @@
 package com.devm7mdibrahim.movies.di
 
 import com.devm7mdibrahim.movies.data.remote.RemoteDataSource
-import com.devm7mdibrahim.movies.data.remote.RemoteDataSourceImpl
 import com.devm7mdibrahim.movies.data.repo.details.DetailsRepository
 import com.devm7mdibrahim.movies.data.repo.details.DetailsRepositoryImpl
 import com.devm7mdibrahim.movies.data.repo.main.MainRepository
 import com.devm7mdibrahim.movies.data.repo.main.MainRepositoryImpl
-import dagger.Binds
+import com.devm7mdibrahim.movies.utils.NetworkHelper
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.scopes.ViewModelScoped
+import kotlin.coroutines.CoroutineContext
 
 @Module
-@InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
+@InstallIn(ViewModelComponent::class)
+object RepositoryModule {
 
-    @Binds
-    @Singleton
-    abstract fun provideMainRepository(mainRepositoryImpl: MainRepositoryImpl): MainRepository
+    @ViewModelScoped
+    @Provides
+    fun provideMainRepository(
+        remoteDataSource: RemoteDataSource,
+        networkHelper: NetworkHelper,
+        coroutineContext: CoroutineContext
+    ): MainRepository = MainRepositoryImpl(remoteDataSource, networkHelper, coroutineContext)
 
-    @Binds
-    @Singleton
-    abstract fun provideDetailsRepository(detailsRepositoryImpl: DetailsRepositoryImpl): DetailsRepository
-
-    @Binds
-    @Singleton
-    abstract fun provideRemoteDataSource(remoteDataSourceImpl: RemoteDataSourceImpl): RemoteDataSource
+    @ViewModelScoped
+    @Provides
+    fun provideDetailsRepository(
+        remoteDataSource: RemoteDataSource,
+        networkHelper: NetworkHelper,
+        coroutineContext: CoroutineContext
+    ): DetailsRepository = DetailsRepositoryImpl(remoteDataSource, networkHelper, coroutineContext)
 }
