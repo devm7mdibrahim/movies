@@ -5,7 +5,6 @@ import com.devm7mdibrahim.movies.data.remote.RemoteDataSource
 import com.devm7mdibrahim.movies.utils.DataState
 import com.devm7mdibrahim.movies.utils.NetworkHelper
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
@@ -17,11 +16,9 @@ class DetailsRepositoryImpl @Inject constructor(
     private val IOContext: CoroutineContext
 ) : DetailsRepository {
 
-    private val _movies = MutableStateFlow<DataState<MovieDetailsResponse>>(DataState.Idle)
-
     override suspend fun getMovieDetails(movieId: Int): Flow<DataState<MovieDetailsResponse>> =
-        flow<DataState<MovieDetailsResponse>> {
-            _movies.emit(DataState.Loading)
+        flow {
+            emit(DataState.Loading)
 
             if (networkHelper.isNetworkConnected()) {
                 try {
@@ -29,17 +26,17 @@ class DetailsRepositoryImpl @Inject constructor(
 
                     if (movieResponse.isSuccessful) {
                         movieResponse.body()?.let {
-                            _movies.emit(DataState.Error("movie not found!"))
+                            emit(DataState.Success(it))
                         }
-                            ?: _movies.emit(DataState.Error("something went wrong, please check internet connection!"))
+                            ?: emit(DataState.Error("something went wrong, please check internet connection!"))
                     } else {
-                        _movies.emit(DataState.Error("something went wrong, please check internet connection!"))
+                        emit(DataState.Error("something went wrong, please check internet connection!"))
                     }
                 } catch (e: Exception) {
-                    _movies.emit(DataState.Error("something went wrong, please check internet connection!"))
+                    emit(DataState.Error("something went wrong, please check internet connection!"))
                 }
             } else {
-                _movies.emit(DataState.Error("no internet connection!"))
+                emit(DataState.Error("no internet connection!"))
             }
         }.flowOn(IOContext)
 }

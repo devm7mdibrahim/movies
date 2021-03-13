@@ -14,11 +14,9 @@ class MainRepositoryImpl @Inject constructor(
     private val IOContext: CoroutineContext
 ) : MainRepository {
 
-    private val _movies = MutableStateFlow<DataState<List<Movie>>>(DataState.Idle)
-
     override suspend fun getMovies(): Flow<DataState<List<Movie>>> =
-        flow<DataState<List<Movie>>> {
-            _movies.emit(DataState.Loading)
+        flow {
+            emit(DataState.Loading)
 
             if (networkHelper.isNetworkConnected()) {
                 try {
@@ -27,20 +25,20 @@ class MainRepositoryImpl @Inject constructor(
                     if (moviesResponse.isSuccessful) {
                         moviesResponse.body()?.let {
                             if (it.movies.isNullOrEmpty()) {
-                                _movies.emit(DataState.Error("no movies found!"))
+                                emit(DataState.Error("no movies found!"))
                             } else {
-                                _movies.emit(DataState.Success(it.movies))
+                                emit(DataState.Success(it.movies))
                             }
                         }
-                            ?: _movies.emit(DataState.Error("something went wrong, please check internet connection!"))
+                            ?: emit(DataState.Error("something went wrong, please check internet connection!"))
                     } else {
-                        _movies.emit(DataState.Error("something went wrong, please check internet connection!"))
+                        emit(DataState.Error("something went wrong, please check internet connection!"))
                     }
                 } catch (e: Exception) {
-                    _movies.emit(DataState.Error("something went wrong, please check internet connection!"))
+                    emit(DataState.Error("something went wrong, please check internet connection!"))
                 }
             } else {
-                _movies.emit(DataState.Error("no internet connection!"))
+                emit(DataState.Error("no internet connection!"))
             }
         }.flowOn(IOContext)
 }

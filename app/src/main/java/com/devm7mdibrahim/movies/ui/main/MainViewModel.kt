@@ -1,11 +1,11 @@
 package com.devm7mdibrahim.movies.ui.main
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.util.Log
+import androidx.lifecycle.*
 import com.devm7mdibrahim.movies.data.model.movies.Movie
 import com.devm7mdibrahim.movies.data.repo.main.MainRepository
 import com.devm7mdibrahim.movies.utils.DataState
+import com.devm7mdibrahim.movies.utils.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn

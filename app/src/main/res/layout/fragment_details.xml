@@ -16,7 +16,7 @@
 
         <ImageView
             android:id="@+id/imageView"
-            loadImage="@{details.backdrop_path}"
+            loadImage="@{details.poster_path}"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_150sdp"
             app:layout_constraintTop_toTopOf="parent"

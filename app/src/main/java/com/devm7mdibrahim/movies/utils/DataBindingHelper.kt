@@ -5,6 +5,8 @@ import androidx.databinding.BindingAdapter
 import com.squareup.picasso.Picasso
 
 @BindingAdapter("loadImage")
-fun loadMovieImage(imageView: ImageView, url: String) {
-    Picasso.get().load(IMAGE_BASE_URL+url).fit().into(imageView)
+fun loadMovieImage(imageView: ImageView, url: String?) {
+    url?.let {
+        Picasso.get().load(IMAGE_BASE_URL + it).fit().into(imageView)
+    }
 }

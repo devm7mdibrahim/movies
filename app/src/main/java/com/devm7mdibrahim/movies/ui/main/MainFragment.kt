@@ -28,7 +28,13 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     private val movieAdapter by lazy {
         MovieAdapter {
-            navController?.navigate(MainFragmentDirections.actionMainFragmentToDetailsFragment(movieId = it.id))
+            displayLog(it.toString())
+
+            navController?.navigate(
+                MainFragmentDirections.actionMainFragmentToDetailsFragment(
+                    movieId = it.id
+                )
+            )
         }
     }
 
@@ -40,7 +46,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     }
 
     private fun initRecyclerView() {
-        displayLog("from init")
         binding?.rvMovies?.run {
             adapter = movieAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
@@ -49,7 +54,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     }
 
     private fun getMovies() {
-        displayLog("from get movies")
         viewModel.getMovies()
 
         lifecycleScope.launchWhenCreated {
@@ -57,21 +61,18 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                 when(it){
                     is DataState.Loading -> {
                         binding?.progressBar?.toVisible()
-                        displayLog("from loading")
                     }
 
                     is DataState.Success -> {
                         binding?.progressBar?.toGone()
                         movieAdapter.submitList(it.data)
-                        displayLog("from success ${it.data}")
                     }
 
                     is DataState.Error -> {
                         binding?.progressBar?.toGone()
                         showToast(it.exception)
-                        displayLog("from error ${it.exception}")
                     }
-                    else -> binding?.progressBar?.toGone()
+                    is DataState.Idle -> binding?.progressBar?.toGone()
                 }
             }
         }
